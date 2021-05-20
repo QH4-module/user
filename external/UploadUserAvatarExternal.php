@@ -53,6 +53,6 @@ class UploadUserAvatarExternal extends ExtUpload
      */
     public function sizeRange()
     {
-        return [0, 2097152];
+        return [0, 5242880];
     }
 }

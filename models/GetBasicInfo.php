@@ -27,7 +27,6 @@ class GetBasicInfo extends ServiceModel
      */
     public $user_id;
 
-
     /**
      * @var ExtUser
      */
@@ -43,9 +42,9 @@ class GetBasicInfo extends ServiceModel
         }
 
         $result = $this->external->getDb()
-            ->select(['ta.id,ta.account,ta.mobile,ta.email,tb.nick_name,tb.avatar,tb.gender,tb.birthday,tb.description,tb.city_id'])
-            ->from("$tb_user as ta")
-            ->leftJoin("$tb_info as tb", 'ta.id=tb.user_id')
+            ->select($this->external->basicInfoField())
+            ->from("$tb_user")
+            ->leftJoin("$tb_info", "{$tb_user}.id={$tb_info}.user_id")
             ->whereArray(['id' => $this->user_id])
             ->row();
 
