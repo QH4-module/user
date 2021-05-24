@@ -26,6 +26,10 @@ use qh4module\user\models\GetBasicInfo;
 use qh4module\user\models\ScoresHistoryList;
 use qh4module\user\models\SetBasicInfo;
 
+/**
+ * Trait TraitUserController
+ * @package qh4module\user
+ */
 trait TraitUserController
 {
     /**
@@ -63,7 +67,6 @@ trait TraitUserController
         return $this->runModel($model);
     }
 
-
     /**
      * 通过旧密码修改密码
      * @return array
@@ -76,7 +79,6 @@ trait TraitUserController
 
         return $this->runModel($model);
     }
-
 
     /**
      * 上传头像

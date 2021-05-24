@@ -16,6 +16,7 @@
 namespace qh4module\user\models;
 
 
+use qh4module\token\TokenFilter;
 use qh4module\user\external\ExtUser;
 use qttx\web\ServiceModel;
 
@@ -74,18 +75,36 @@ class SetBasicInfo extends ServiceModel
 
     public function run()
     {
-        $this->external->getDb()
-            ->update($this->external->userInfoTableName())
-            ->cols([
-                'nick_name' => $this->nick_name,
-                'avatar' => $this->avatar,
-                'gender' => $this->gender,
-                'birthday' => $this->birthday,
-                'description' => $this->description,
-                'city_id' => $this->city_id
-            ])
-            ->query();
+        $db = $this->external->getDb();
 
-        return true;
+        $db->beginTrans();
+
+        try {
+
+            $user_id = TokenFilter::getPayload('user_id');
+
+            $this->external->getDb()
+                ->update($this->external->userInfoTableName())
+                ->cols([
+                    'nick_name' => $this->nick_name,
+                    'avatar' => $this->avatar,
+                    'gender' => $this->gender,
+                    'birthday' => $this->birthday,
+                    'description' => $this->description,
+                    'city_id' => $this->city_id
+                ])
+                ->whereArray(['user_id'=>$user_id])
+                ->query();
+
+            $this->external->onInfoChange($user_id, $db);
+
+            $db->commitTrans();
+
+            return true;
+
+        } catch (\Exception $exception) {
+            $db->rollBackTrans();
+            throw $exception;
+        }
     }
 }

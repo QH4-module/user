@@ -16,6 +16,7 @@
 namespace qh4module\user\external;
 
 
+use qttx\components\db\DbModel;
 use qttx\web\External;
 
 class ExtUser extends External
@@ -53,6 +54,16 @@ class ExtUser extends External
     }
 
     /**
+     * 城市表
+     * @return string
+     */
+    public function cityTableName()
+    {
+        return '{{%city}}';
+    }
+
+
+    /**
      * 获取基础信息时返回的字段
      * 可以同时返回 `tbl_user`和`tbl_user_info表的信息`,如果两个表有重复字段,请加表前缀
      * @return string[]
@@ -65,7 +76,14 @@ class ExtUser extends External
 //        return ['tbl_user.field','tbl_user_info.field']
     }
 
+    /**
+     * 用户信息改变后执行
+     * @param string $user_id
+     * @param DbModel $db 事务的句柄
+     */
+    public function onInfoChange($user_id,$db)
+    {
 
-
+    }
 
 }

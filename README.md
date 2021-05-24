@@ -8,7 +8,7 @@ QH4框架扩展模块-用户模块
 ### 依赖
 该模块依赖于 `city` 城市模块
 ```
-composer require qh4/city
+composer require qh4module/city
 ```
 
 ### api列表

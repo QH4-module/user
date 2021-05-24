@@ -20,6 +20,11 @@ use qh4module\token\TokenFilter;
 use qh4module\user\external\ExtUser;
 use qttx\web\ServiceModel;
 
+/**
+ * Class GetBasicInfo
+ * @package qh4module\user\models
+ * @property ExtUser $external
+ */
 class GetBasicInfo extends ServiceModel
 {
     /**
@@ -27,10 +32,6 @@ class GetBasicInfo extends ServiceModel
      */
     public $user_id;
 
-    /**
-     * @var ExtUser
-     */
-    protected $external;
 
     public function run()
     {
@@ -50,6 +51,18 @@ class GetBasicInfo extends ServiceModel
 
         if ($result['mobile']) {
             $result['mobile'] = substr_replace($result['mobile'], '****', 3, 4);
+        }
+        if ($result['city_id']) {
+            $result['city_id_path'] = [];
+            $result_city = \QTTX::$app->db
+                ->select(['parent_path'])
+                ->from($this->external->cityTableName())
+                ->whereArray(['id' => $result['city_id']])
+                ->row();
+            $ary = explode(',', $result_city['parent_path']);
+            foreach ($ary as $item) {
+                $result['city_id_path'][] = intval($item);
+            }
         }
 
         return $result;
